@@ -1,5 +1,5 @@
 ---
-#Installing Wordpress for OS Ubuntu
+#Installing Wordpress for OS "Ubuntu"
 - name: Download wordpress
   hosts: all
   tasks:
