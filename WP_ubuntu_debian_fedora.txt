@@ -1,0 +1,114 @@
+---
+#Installing Wordpress for OS Ubuntu
+- name: Download wordpress
+  hosts: all
+  tasks:
+    - name: Download package
+      when: ansible_distribution == "Ubuntu"
+      get_url:
+       url: https://wordpress.org/latest.tar.gz
+       dest:  /tmp/latest.tar.gz
+
+
+#install apache2 configuration instead of httpd for OS Ubuntu
+    - name: Install apache2
+      when: ansible_distribution == "Ubuntu"
+      package:
+        name: "{{ item }}"
+      with_items:
+        - apache2
+        - php
+        - telnet
+        - php-mysql
+
+
+    - name: Unarchive the package
+      when: ansible_distribution == "Ubuntu"
+      unarchive:
+        src: /tmp/latest.tar.gz
+        dest: /var/www/html/
+
+
+    - name: Move wordpress folder
+      when: ansible_distribution == "Ubuntu"
+      shell: "mv /var/www/html/wordpress/*  /var/www/html/"
+      ignore_errors: true
+
+
+    - name: APACHERESTARTUBUNTU
+      when: ansible_distribution == "Ubuntu"
+      service:
+        name: apache2
+        state: restarted
+
+
+#Installing Wordpress for OS Debian
+    - name: Download package
+      when: ansible_distribution == "Debian"
+      get_url:
+       url: https://wordpress.org/latest.tar.gz
+       dest:  /tmp/latest.tar.gz
+
+#install apache2 configuration instead of httpd for OS Debian
+    - name: Install apache2
+      when: ansible_distribution == "Debian"
+      package:
+        name: "{{ item }}"
+      with_items:
+        - apache2
+        - php
+        - telnet
+        - php-mysql
+
+
+    - name: Unarchive the package
+      when: ansible_distribution == "Debian"
+      unarchive:
+        src: /tmp/latest.tar.gz
+        dest: /var/www/html/
+
+
+    - name: Move wordpress folder
+      when: ansible_distribution == "Debian"
+      shell: "mv /var/www/html/wordpress/*  /var/www/html/"
+      ignore_errors: true
+
+
+    - name: APACHERESTARTUBUNTU
+      when: ansible_distribution == "Debian"
+      service:
+        name: apache2
+        state: restarted
+
+
+#Installing Wordpress for OS Fedora
+    - name: Download package
+      when: ansible_distribution == "Fedora"
+      get_url:
+       url: https://wordpress.org/latest.tar.gz
+       dest: /tmp/latest.tar.gz
+
+
+#install php-mysqlnd instead of php-myqsl for OS Ubuntu
+    - name: Install httpd
+      when: ansible_distribution == "Fedora"
+      package:
+        name: "{{ item }}"
+      with_items:
+        - httpd
+        - php
+        - telnet
+        - php-mysqlnd
+
+
+    - name: Move wordpress folder
+      when: ansible_distribution == "Fedora"
+      shell: "mv /var/www/html/wordpress/*  /var/www/html/"
+      ignore_errors: true
+
+
+    - name: HTTPDRESTART
+      when: ansible_distribution == "Fedora"
+      service:
+        name: httpd
+        state: restarted
